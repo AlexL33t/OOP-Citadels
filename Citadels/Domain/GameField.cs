@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,10 +11,10 @@ namespace Citadels.Domain
         public List<Player> Players;
         public List<Person> Persons;
 
-        public Player HasCrown = null;//
-        public Person Killed = null;//
+        public Player HasCrown = null;
+        public Person Killed = null;
 
-        private static int income = 1;
+        private int income = 1;
         private Queue<Quarter> freeQuarters;
         private Dictionary<Player, List<Quarter>> cities;
         private Dictionary<Player, List<Quarter>> onHand;
@@ -23,6 +23,14 @@ namespace Citadels.Domain
         public GameField(Queue<Quarter> freeQuarters)
         {
             this.freeQuarters = freeQuarters;
+            InitializeField();
+        }
+
+        private void InitializeField()
+        {
+            cities = new Dictionary<Player,List<Quarter>>();
+            onHand = new Dictionary<Player,List<Quarter>>();
+            bank = new Dictionary<Player,int>();
         }
 
         #region Show
@@ -40,10 +48,15 @@ namespace Citadels.Domain
         {
             return cities[player].AsReadOnly();
         }
+
+        public int ShowIncome()
+        {
+            return income;
+        }
         #endregion
 
         # region Bank
-        public void AddMoneyInBank(Player currentPlayer, int count)
+        public void AddMoneyToBank(Player currentPlayer, int count)
         {
             bank[currentPlayer] += count;
         }
@@ -108,11 +121,10 @@ namespace Citadels.Domain
             cities[player].Add(quarter);
         }
 
-        public Quarter DestroyQuarterInCity(Player player, int index)
+        public void DestroyQuarterInCity(Player player, int index)
         {
             var quarter = cities[player][index];
             cities[player].RemoveAt(index);
-            return quarter;
         }
         #endregion
 
@@ -121,9 +133,9 @@ namespace Citadels.Domain
             Killed = person;
         }
 
-        public void Crown(Player person)
+        public void Crown(Player player)
         {
-            HasCrown = person;
+            HasCrown = player;
         }
     }
 }
