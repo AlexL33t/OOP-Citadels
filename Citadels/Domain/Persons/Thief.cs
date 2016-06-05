@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,17 +11,19 @@ namespace Citadels.Domain
         public Thief()
         {
             Rank = 2;
+            PersonActions = new List<Action<Player, Choice, GameField>>() {
+                TakeMoneyFromPlayer
+            };
         }
 
-        public void TakeMoneyFromPerson(Player player, Choice choice, GameField field)
+        void TakeMoneyFromPlayer(Player player, Choice choice, GameField field)
         {
             if (choice.Person == field.Killed || choice.Person is Assassin)
                 throw new Exception("");
-            var newPlayer = new Player();
 
-            int money = field.ShowBankState(player);
-            field.TakeMoneyFromBank(newPlayer, money);
-            field.AddMoneyInBank(player, money);
+            var money = field.ShowBankState(choice.Player);
+            field.TakeMoneyFromBank(choice.Player, money);
+            field.AddMoneyToBank(player, money);
         }
 
     }
