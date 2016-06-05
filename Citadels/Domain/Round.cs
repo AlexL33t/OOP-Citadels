@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,8 +23,6 @@ namespace Citadels.Domain
         private int indexPlayer;
         private List<PlayerAction> playerActions;
 
-
-
         public Round(GameField gameField, Player hasCrown)
         {
             this.gameField = gameField;
@@ -32,6 +30,11 @@ namespace Citadels.Domain
             persons = new List<Person>(gameField.Persons);
             var i = gameField.Players.IndexOf(gameField.HasCrown);
             indexPlayer = i == -1 ? 0 : i;
+        }
+
+        public Person GetPersonOfPlayer(Player player)
+        {
+            return playerToPerson[player];
         }
 
         public void CharacterSelection(Player currentPlayer, Choice choice)
