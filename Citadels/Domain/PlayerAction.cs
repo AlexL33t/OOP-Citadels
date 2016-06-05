@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,10 +14,6 @@ namespace Citadels.Domain
         private bool isQuarterTaken;
         private bool isPersonChosen;
         private bool isIncomeTaken;
-
-        //bool isMainActionDone = false;
-        //bool isAdditionalActionDone = false;
-        //bool isMoneyTaken = false;
 
         public bool Finished = false;
 
@@ -38,16 +34,6 @@ namespace Citadels.Domain
         {
             return false;
         }
-        /* перенес это в GameField
-        public void KillPerson(Person person)
-        {
-            Killed = person;
-        }
-
-        public void Crown(Player player)
-        {
-            HasCrown = player;
-        }*/
 
         void BuildQuarter(GameField field, Player player, int index)
         {
@@ -58,15 +44,14 @@ namespace Citadels.Domain
             field.BuildQuarterInCity(player, quarter);
         }
 
-        void GetMoneyFromQuarters(Player currentPlayer, GameField field) // city, income, bank
+        void GetMoneyFromQuarters(Player currentPlayer, Round currentRound, GameField field) // city, income, bank
         {
-            var person = playerToPerson[currentPlayer];
-            int money = field
+            var person = currentRound.GetPersonOfPlayer(currentPlayer);
+            var money = field
                 .ShowCity(currentPlayer)
                 .Where(quarter => quarter.Color == person.Color)
-                .Count() * income;
-            field.AddMoneyInBank(currentPlayer, money); ///
+                .Count() * field.ShowIncome();
+            field.AddMoneyToBank(currentPlayer, money); ///
         }
-
     }
 }
