@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,15 +7,13 @@ using System.Collections.Generic;
 
 namespace Citadels.Domain
 {
-    public enum State { InitRound, PlayingRound }
-
     public class Game
     {
         public bool Finished { get; set; }
         public IEnumerable<Player> Players { get; private set; }
         
-        List<Person> persons;
-        GameField gameField;
+        private List<Person> persons;
+        private GameField gameField;
         private List<Round> rounds;
         private int currentRound;
         
@@ -28,13 +26,25 @@ namespace Citadels.Domain
         }
 
         public bool IsFinished { get { return rounds[currentRound].Finished; } }
-        
-        public Game(List<Player> players, List<Person> persons, bool extended=false)
+
+        public Game(List<Player> players)
         {
             rounds = new List<Round>();
             Players = players;
-            persons = new List<Person>();
+            persons = GetPersons();
+            gameField = new GameField(new Queue<Quarter>());
+        }
+
+        private List<Person> GetPersons()
+        {
+            var persons = new List<Person>();
+            persons.Add(new Architect());
             persons.Add(new Assassin());
+            persons.Add(new King());
+            persons.Add(new Magician());
+            persons.Add(new Thief());
+            persons.Add(new Warlord());
+            return persons;
         }
 
         public bool AddChoice(Choice choice)
@@ -56,8 +66,6 @@ namespace Citadels.Domain
             rounds.Add(round);
             var state = State.InitRound;
         }
-
-
 
         private void AddChoiceInRound(Choice choice)
         {
