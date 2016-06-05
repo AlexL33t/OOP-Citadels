@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,16 +11,22 @@ namespace Citadels.Domain
         public Warlord()
         {
             Rank = 8;
+            Color = QuarterColor.Red;
+            PersonActions = new List<Action<Player, Choice, GameField>>() {
+                DestroyQuarter
+            };
         }
 
         void DestroyQuarter(Player warlord, Choice choice, GameField field)
         {
-            if (choice.Quarters[0].Cost > field.ShowBankState(warlord) + 1)
+            var quarterCost = choice.Quarters[0].Cost;
+            if (quarterCost > field.ShowBankState(warlord) + 1)
                 throw new Exception("");
-
-            field.TakeMoneyFromBank(warlord, choice.Quarters[0].Cost - 1);
-            var destroyedQuarter = field.DestroyQuarterInCity(choice.Player, choice.i);
-            //???
+            if (choice.Person is Bishop)
+                return;
+            field.DestroyQuarterInCity(choice.Player, choice.i);
+            if (quarterCost != 1)
+                field.TakeMoneyFromBank(warlord, quarterCost - 1);
         }
     }
 }
