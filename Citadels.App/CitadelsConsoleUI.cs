@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,9 +19,10 @@ namespace Citadels.App
         public void Run()
         {
             var names = getParametersGame();
-            var players = names
-                .Select(name => new Player() { Name = name })
-                .ToList();
+            var players = new List<Player>();
+
+            for (var i = 0; i < names.Count; i++)
+                players.Add(new Player(i.ToString(), names[i]));
 
             foreach (var pl in players)
                 playerToPlAction.Add(pl, new PlayerAction());
@@ -48,7 +49,7 @@ namespace Citadels.App
             
         private Choice Prompt()
         {
-            return new Choice();
+            return new Choice(new Assassin(), new Player("123", "Alex"));
         }
 
         private PlayerAction getAction(Game game)
