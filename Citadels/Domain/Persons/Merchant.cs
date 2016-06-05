@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,12 +10,13 @@ namespace Citadels.Domain
     {
         public Merchant()
         {
-            Rank = 5;
+            Rank = 6;
+            Color = QuarterColor.Green;
         }
 
         void GetMoneyForMerchant(Player merchant, GameField field)
         {
-            field.AddMoneyInBank(merchant, 1);
+            field.AddMoneyToBank(merchant, 1);
         }
     }
 }
