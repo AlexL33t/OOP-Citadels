@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +11,7 @@ namespace Citadels.Domain
         public King()
         {
             Rank = 4;
+            Color = QuarterColor.Yellow;
         }
 
         void Сoronation(Player king, GameField field)
