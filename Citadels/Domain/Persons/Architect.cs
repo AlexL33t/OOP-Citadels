@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +10,7 @@ namespace Citadels.Domain
     {
         public Architect()
         {
-            Rank = 6;
+            Rank = 7;
         }
 
         [InfoAct(Name="", Time = 6)]
