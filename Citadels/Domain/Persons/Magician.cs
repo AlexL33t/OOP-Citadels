@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -27,7 +27,6 @@ namespace Citadels.Domain
 
         void ExchangeQuartersWithFreeQuarters(Player magician, Choice choice, GameField field)
         {
-            //var q = choice.quarters;
             var indices = new int[] { 1, 3, 4 };
             if (indices.Length > field.ShowQuarterOnHand(magician).Count)
                 throw new Exception("");
