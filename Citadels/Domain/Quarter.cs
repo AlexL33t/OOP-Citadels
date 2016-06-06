@@ -8,7 +8,7 @@ namespace Citadels.Domain
 {
     public abstract class Quarter
     {
-        public abstract int Cost;
-        public abstract QuarterColor Color; 
+        public int Cost;
+        public QuarterColor Color; 
     }
 }
