@@ -1,22 +1,39 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Citadels.Domain
 {
-    public class King : Person
+    class King : Person
     {
+        class Сoronation : Act
+        {
+            public Сoronation(Player player, Person person, GameField field) :
+                base(player, person, field) { }
+
+            public override List<object> GetParam()
+            {
+                return null;
+            }
+
+            public override void Do(int[] choice, List<object> answ, Flags flags)
+            {
+                field.Crown(player);
+                flags.AddActionDone = true;
+            }
+
+            public override InfoAct Info
+            {
+                get { return new InfoAct() { Name = "" }; }
+            }
+        }
+
         public King()
         {
             Rank = 4;
-            Color = QuarterColor.Yellow;
         }
 
-        void Сoronation(Player king, GameField field)
+        public override List<Act> GetPossibleActons(Player player, Person person, Flags flags, GameField field)
         {
-            field.Crown(king);
+            return new List<Act>(){ new Сoronation(player, person, field)};
         }
     }
 }
