@@ -77,7 +77,7 @@ namespace Citadels.Domain
                 if (!flags.IncomeTaken && field.ShowCity(player).Any(q => q.Color == person.Color))
                     actions.Add(new GetMoneyFromQuarters(player, person, field));
             }
-            if (flags.AddActionDone)
+            if (!flags.AddActionDone)
                 person
                     .GetPossibleActons(player, person, flags, field)
                     .ForEach(e => actions.Add(e));
