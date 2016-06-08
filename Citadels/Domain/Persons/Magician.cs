@@ -1,39 +1,71 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Citadels.Domain
 {
-    public class Magician : Person
+    class Magician : Person
     {
+        class ExchangeQuartersWithPlayer : Act
+        {
+            public ExchangeQuartersWithPlayer(Player player, Person person, GameField field) :
+                base(player, person, field) { }
+
+            public override List<object> GetParam()
+            {
+                return new List<object>(field.Players);
+            }
+
+            public override void Do(int[] choice, List<object> answ, Flags flags)
+            {
+                var magicianQuarters = field.TakeAllQuartersFromHand(player);
+                var playerQuarters = field.TakeAllQuartersFromHand((Player)answ[choice[0]]);
+                field.PutQuartersInHand((Player)answ[choice[0]], magicianQuarters);
+                field.PutQuartersInHand(player, playerQuarters);
+                flags.AddActionDone = true;
+            }
+
+            public override InfoAct Info
+            {
+                get { return new InfoAct() { Name = "" }; }
+            }
+        }
+
+        class ExchangeQuartersWithFreeQuarters : Act
+        {
+            public ExchangeQuartersWithFreeQuarters(Player player, Person person, GameField field) :
+                base(player, person, field) { }
+
+            public override List<object> GetParam()
+            {
+                return new List<object>(field.Players);
+            }
+
+            public override void Do(int[] choice, List<object> answ, Flags flags)
+            {
+                if (choice.Length > field.ShowQuarterInHand(player).Count)
+                    throw new Exception("");
+
+                var magicianQuarters = field.TakeQuartersFromHand(player, choice);
+                var deckQuarters = field.TakeQuartersFromDeck(choice.Length);
+                field.PutQuartersOnDeck(deckQuarters);
+                flags.AddActionDone = true;
+            }
+
+            public override InfoAct Info
+            {
+                get { return new InfoAct() { Name = "" }; }
+            }
+        }
+        
         public Magician()
         {
             Rank = 3;
-            PersonActions = new List<Action<Player, Choice,GameField>>() { 
-                ExchangeQuartersWithPlayer, 
-                ExchangeQuartersWithFreeQuarters
-            };
         }
 
-        void ExchangeQuartersWithPlayer(Player magician, Choice choice, GameField field)
+        public override List<Act> GetPossibleActons(Player player, Person person, Flags flags, GameField field)
         {
-            var magicianQuarters = field.TakeAllQuartersFromHand(magician);
-            var playerQuarters = field.TakeAllQuartersFromHand(choice.Player);
-            field.TakeQuartersOnHand(magician, magicianQuarters);
-            field.TakeQuartersOnHand(choice.Player, playerQuarters);
-        }
-
-        void ExchangeQuartersWithFreeQuarters(Player magician, Choice choice, GameField field)
-        {
-            var indices = new int[] { 1, 3, 4 };
-            if (indices.Length > field.ShowQuarterOnHand(magician).Count)
-                throw new Exception("");
-            
-            var magicianQuarters = field.TakeSeveralQuartersFromHand(magician, indices);
-            var deckQuarters = field.TakeQuartersFromDeck(indices.Length);
-            field.PutQuartersOnDeck(magician, deckQuarters);
+            return new List<Act>() { new ExchangeQuartersWithPlayer(player, person, field),
+            new ExchangeQuartersWithFreeQuarters(player, person, field)};
         }
     }
 }
