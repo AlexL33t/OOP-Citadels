@@ -49,10 +49,7 @@ namespace Citadels.Domain
             return cities[player].AsReadOnly();
         }
 
-        public int ShowIncome()
-        {
-            return income;
-        }
+        public int ShowIncome {get {return income;}}
         #endregion
 
         # region Bank
