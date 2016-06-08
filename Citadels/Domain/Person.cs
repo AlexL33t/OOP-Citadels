@@ -9,17 +9,11 @@ namespace Citadels.Domain
     public abstract class Person
     {
         public int Rank;
-        public QuarterColor Color;
-        public List<Action<Player, Choice, GameField>> PersonActions;
-        /* ассасин
-         * вор
-         * маг
-         * король(желтый)
-         * епископ(синий)
-         * купец(зеленый) "2" сп
-         * зодчий
-         * военный(красный) '2' способности 
-         */
+        public QuarterColor Color = QuarterColor.None;;
+        public int MaxCountOfTakenQuartersFromDeck = 1;
+
+        public abstract List<Act> GetPossibleActons(Player player, Person person, Flags flags, GameField field);
+        
         #region equals, gethashcode
         protected bool Equals(Person other)
         {
