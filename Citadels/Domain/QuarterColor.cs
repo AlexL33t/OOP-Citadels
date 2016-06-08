@@ -11,6 +11,7 @@ namespace Citadels.Domain
         Yellow = 1,
         Blue = 2,
         Green = 3,
-        Red = 4
+        Red = 4,
+        None = 5
     }
 }
