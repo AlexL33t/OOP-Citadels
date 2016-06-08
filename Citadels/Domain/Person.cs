@@ -31,7 +31,7 @@ namespace Citadels.Domain
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return Equals((Choice)obj);
+            return Equals((Person)obj);
         }
 
         public override int GetHashCode()
