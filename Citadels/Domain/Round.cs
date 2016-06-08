@@ -1,116 +1,109 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Citadels.Domain
 {
     public class Round
-    {   
-        //public Player HasCrown = null;//
-        //public Person Killed = null;//
-        
-        public bool Finished;
+    {
+        public bool Finished { get { return gameField.Players.Count == pl.Count && pl.Last().Finished; } }
         public bool IsInited { get { return gameField.Players.Count == playerToPerson.Count; } }
-        
+        public string CurrentPlayerName { get { return players[indexPlayer].Name; } }
 
-        private Dictionary<Player, Person> playerToPerson;//
-        
+        private Dictionary<Player, Person> playerToPerson;
+
         private GameField gameField;
-        
-        private List<Person> persons;
-        private int indexPlayer;
-        private List<PlayerAction> playerActions;
 
-        public Round(GameField gameField, Player hasCrown)
+        private List<Person> persons;
+        private List<Player> players;
+        private int indexPlayer;
+        private List<PlayerAction> pl;
+
+        public Round(GameField gameField)
         {
             this.gameField = gameField;
-            Finished = false;
+            pl = new List<PlayerAction>();
+            playerToPerson = new Dictionary<Player, Person>();
             persons = new List<Person>(gameField.Persons);
+            indexPlayer = 0;
             var i = gameField.Players.IndexOf(gameField.HasCrown);
-            indexPlayer = i == -1 ? 0 : i;
+            players = (i != -1) ? GetPlayers(players, i) : new List<Player>(gameField.Players);
         }
 
-        public Person GetPersonOfPlayer(Player player)
+        private List<Player> GetPlayers(List<Player> players, int i)
         {
-            return playerToPerson[player];
+            var pl = new List<Player>();
+            for (int j = 0; j < gameField.Players.Count; j++)
+            {
+                pl.Add(players[i]);
+                i = (i + 1) % players.Count;
+            }
+            return pl;
         }
 
-        public void CharacterSelection(Player currentPlayer, Choice choice)
+        public void CharacterSelection(Player currentPlayer, int[] choice)
         {
-            persons.Remove(choice.Person);
-            playerToPerson.Add(currentPlayer, choice.Person);
+            if (choice.Length > 1)
+                throw new Exception("");
+
+            playerToPerson.Add(currentPlayer, persons[choice[0]]);
+            persons.RemoveAt(choice[0]);
         }
 
         private void Sorting()
         {
             int index = gameField.Players.IndexOf(gameField.HasCrown);
-            gameField.Players.Sort(delegate(Player x, Player y)
+            players.Sort(delegate(Player x, Player y)
             {
                 return playerToPerson[x].Rank.CompareTo(playerToPerson[y].Rank);
             });
+
+            foreach (var e in players)
+                pl.Add(new PlayerAction(e, playerToPerson[e], gameField));
+            indexPlayer = 0;
         }
 
-        public void AddChoice(Choice choice)
+        public void AddChoice(int[] choice)
         {
             var currentPlayer = gameField.Players[indexPlayer];
+
             if (!IsInited)
             {
-                if (indexPlayer < gameField.Players.Count)
-                {
-                    CharacterSelection(currentPlayer, choice);
-                    indexPlayer += 1;
-                }
-                else
-                {
+                CharacterSelection(currentPlayer, choice);
+                indexPlayer += 1;
+                if (indexPlayer == gameField.Players.Count)
                     Sorting();
-                    indexPlayer = 0;
-                }
             }
             else
             {
-                playerActions[indexPlayer].AddChoice(choice, this);
-                if (playerActions[indexPlayer].Finished)
-                {
-                    indexPlayer += 0;
-                    playerActions.Add(new PlayerAction());
-                }
-                if (indexPlayer > gameField.Players.Count)
-                    Finished = true;
+                pl[indexPlayer].AddChoice(choice);
+                if (pl[indexPlayer].Finished && !Finished) indexPlayer++;
             }
         }
 
-        public bool GetPossibleAction()
+        public List<InfoAct> GetPossibleAction()
         {
-            return playerActions[indexPlayer].GetPossibleAction(this); // stub
+            if (Finished)
+                throw new Exception("");
+            if (!IsInited)
+                return new List<InfoAct>() { new InfoAct() { Name = "Выбирите персонажа" } };
+            return pl[indexPlayer].GetPossibleActions();
         }
 
-        public List<Action<Player, Choice>> DoMainAction()
+        public List<object> Param
         {
-            return new List<Action<Player, Choice>>() { };
-        }
-
-        /*void Play()
-        {
-            var currentPlayer = new Player();
-            var person = PlayerToPerson[currentPlayer]; // Военный
-
-            var done = false;
-            done = wer(currentPlayer);
-
-            var act = Act.TakeMoney; // Cпросить какое действие совершить
-            switch (act)
+            get
             {
-                case Act.TakeMoney: GetMoneyFromBank(currentPlayer); break;
-                case Act.TakeQuarter: GetQuarter(currentPlayer); break;
+                if (!IsInited)
+                    return new List<object>(persons);
+                return pl[indexPlayer].GetParam();
             }
-            if (!done)
-                done = wer(currentPlayer);
-            var money = bank[currentPlayer];
-            
-            if (Quarters.Where(q => q.Cost < money).Count() > 0)
-                wer2(currentPlayer, "", BuyQuater);
-            qwe(currentPlayer);*/
+        }
+
+        public void ChoiseAction(int i)
+        {
+            if (IsInited)
+                pl[indexPlayer].ChoiseAction(i);
+        }
     }
 }
