@@ -1,22 +1,39 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Citadels.Domain
 {
-    public class Merchant : Person
+    class Merchant : Person
     {
-        public Merchant()
+        class MerchantAction : Act
         {
-            Rank = 6;
-            Color = QuarterColor.Green;
+            public MerchantAction(Player player, Person person, GameField field) :
+                base(player, person, field) { }
+
+            public override List<object> GetParam()
+            {
+                return null;
+            }
+
+            public override void Do(int[] choice, List<object> answ, Flags flags)
+            {
+                field.AddMoneyInBank(player, 1);
+                flags.AddActionDone = true;
+            }
+
+            public override InfoAct Info
+            {
+                get { return new InfoAct() { Name = "" }; }
+            }
         }
 
-        void GetMoneyForMerchant(Player merchant, GameField field)
+        public Merchant()
         {
-            field.AddMoneyToBank(merchant, 1);
+            Rank = 5;
+        }
+
+        public override List<Act> GetPossibleActons(Player player, Person person, Flags flags, GameField field)
+        {
+            return new List<Act>() {new MerchantAction(player, person, field)};
         }
     }
 }
