@@ -19,6 +19,8 @@ namespace Citadels.Domain
         private Dictionary<Player, List<Quarter>> cities;
         private Dictionary<Player, List<Quarter>> onHand;
         private Dictionary<Player, int> bank;
+        
+        public int CountQuartersInDeck { get { return freeQuarters.Count; } }
 
         public GameField(Queue<Quarter> freeQuarters)
         {
