@@ -1,42 +1,54 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Citadels.Domain
 {
     public class GameField
     {
-        public List<Player> Players;
-        public List<Person> Persons;
+        public readonly List<Player> Players;
+        public readonly List<Person> Persons;
 
         public Player HasCrown = null;
         public Person Killed = null;
 
-        private int income = 1;
+        private static int income = 1;
         private Queue<Quarter> freeQuarters;
         private Dictionary<Player, List<Quarter>> cities;
         private Dictionary<Player, List<Quarter>> onHand;
         private Dictionary<Player, int> bank;
-        
+
         public int CountQuartersInDeck { get { return freeQuarters.Count; } }
 
-        public GameField(Queue<Quarter> freeQuarters)
+        public GameField(List<Player> players, List<Person> persons, List<Quarter> freeQuarters)
         {
-            this.freeQuarters = freeQuarters;
-            InitializeField();
+            this.freeQuarters = new Queue<Quarter>(freeQuarters);
+            Players = players;
+            Persons = persons;
+            cities = new Dictionary<Player, List<Quarter>>();
+            onHand = new Dictionary<Player, List<Quarter>>();
+            bank = new Dictionary<Player, int>();
+            foreach (var e in players)
+            {
+                cities.Add(e, new List<Quarter>());
+                onHand.Add(e, new List<Quarter>());
+                bank.Add(e, 0);
+            }
         }
 
-        private void InitializeField()
+
+        public int ShowIncome {get {return income;}}
+
+        public void KillPerson(Person person)
         {
-            cities = new Dictionary<Player,List<Quarter>>();
-            onHand = new Dictionary<Player,List<Quarter>>();
-            bank = new Dictionary<Player,int>();
+            Killed = person;
+        }
+
+        public void Crown(Player player)
+        {
+            HasCrown = player;
         }
 
         #region Show
-        public IReadOnlyList<Quarter> ShowQuarterOnHand(Player player)
+        public IReadOnlyList<Quarter> ShowQuarterInHand(Player player)
         {
             return onHand[player].AsReadOnly();
         }
@@ -50,12 +62,10 @@ namespace Citadels.Domain
         {
             return cities[player].AsReadOnly();
         }
-
-        public int ShowIncome {get {return income;}}
         #endregion
 
         # region Bank
-        public void AddMoneyToBank(Player currentPlayer, int count)
+        public void AddMoneyInBank(Player currentPlayer, int count)
         {
             bank[currentPlayer] += count;
         }
@@ -74,25 +84,19 @@ namespace Citadels.Domain
             return quarters;
         }
 
-        public List<Quarter> TakeSeveralQuartersFromHand(Player player, int[] i)
+        public List<Quarter> TakeQuartersFromHand(Player player, int[] i)
         {
-            var quarters = new List<Quarter>();
-            foreach (var e in i)
-            {
-                quarters.Add(onHand[player][e]);
-                onHand[player].Remove(onHand[player][e]);
-            }
-            return quarters;
+            return new List<Quarter>();
         }
 
-        public Quarter TakeOneQuarterFromHand(Player player, int index)
+        public Quarter TakeQuarterFromHand(Player player, int index)
         {
             var quarter = onHand[player][index];
             onHand[player].RemoveAt(index);
             return quarter;
         }
 
-        public void TakeQuartersOnHand(Player player, List<Quarter> quarters)
+        public void PutQuartersInHand(Player player, List<Quarter> quarters)
         {
             onHand[player].AddRange(quarters);
         }
@@ -107,7 +111,7 @@ namespace Citadels.Domain
             return quarters;
         }
 
-        public void PutQuartersOnDeck(Player player, List<Quarter> quarters)
+        public void PutQuartersOnDeck(List<Quarter> quarters)
         {
             foreach (var i in quarters)
                 freeQuarters.Enqueue(i);
@@ -120,21 +124,12 @@ namespace Citadels.Domain
             cities[player].Add(quarter);
         }
 
-        public void DestroyQuarterInCity(Player player, int index)
+        public Quarter DestroyQuarterInCity(Player player, int index)
         {
             var quarter = cities[player][index];
             cities[player].RemoveAt(index);
+            return quarter;
         }
         #endregion
-
-        public void KillPerson(Person person)
-        {
-            Killed = person;
-        }
-
-        public void Crown(Player player)
-        {
-            HasCrown = player;
-        }
     }
 }
