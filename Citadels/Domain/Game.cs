@@ -1,40 +1,69 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.Generic;
+using Citadels.Domain.Quarters;
 
 namespace Citadels.Domain
 {
     public class Game
-    {
-        public bool Finished { get; set; }
-        public IEnumerable<Player> Players { get; private set; }
-        
-        private List<Person> persons;
+    {        
         private GameField gameField;
         private List<Round> rounds;
         private int currentRound;
-        
-        public State State;
-        public Info InfoAboutCP { 
-            get 
-            {
-                return new Info() { }; 
-            } 
-        }
 
-        public bool IsFinished { get { return rounds[currentRound].Finished; } }
+        public string CurrentPlayerName {get { return rounds[currentRound].CurrentPlayerName;}}
 
-        public Game(List<Player> players)
+        public bool Finished
         {
-            rounds = new List<Round>();
-            Players = players;
-            persons = GetPersons();
-            gameField = new GameField(new Queue<Quarter>());
+            get
+            {
+                return gameField.Players.Select(player => gameField.ShowCity(player).Count).Any(c => c == 8);
+            }
         }
 
+        public bool RoundFinished 
+        { 
+            get { return rounds[currentRound].Finished; } 
+        }
+
+        public Game(List<Player> players, bool extended=false)
+        {
+            List<Person> persons = GetPersons();
+            List<Quarter> quarters = new List<Quarter>(){new Q1(), new Q2()};
+            gameField = new GameField(players, persons, quarters);
+            rounds = new List<Round>();
+            rounds.Add(new Round(gameField));
+        } 
+
+        public void AddChoice(int[] choice)
+        {
+            if (Finished)
+                throw new Exception("");
+
+            rounds[currentRound].AddChoice(choice);
+
+            if (RoundFinished && !Finished)
+            {
+                rounds.Add(new Round(gameField));
+                currentRound++;
+            }
+        }
+
+        public List<InfoAct> GetPossibleAction()
+        {
+            return rounds[currentRound].GetPossibleAction();
+        }
+
+        public List<object> Param
+        {
+            get { return rounds[currentRound].Param; } 
+        }
+
+        public void ChoiseAction(int i)
+        {
+            rounds[currentRound].ChoiseAction(i);
+        }
+        
         private List<Person> GetPersons()
         {
             var persons = new List<Person>();
@@ -42,42 +71,9 @@ namespace Citadels.Domain
             persons.Add(new Assassin());
             persons.Add(new King());
             persons.Add(new Magician());
-            persons.Add(new Thief());
-            persons.Add(new Warlord());
+            //persons.Add(new Thief());
+            //persons.Add(new Warlord());
             return persons;
-        }
-
-        public bool AddChoice(Choice choice)
-        {
-            if (Finished)
-                throw new Exception("");
-            
-            switch (State)
-            {
-                case State.InitRound: CreateRound(); break;
-                case State.PlayingRound: AddChoiceInRound(choice); break;
-
-            }
-        }
-        
-        private void CreateRound()
-        {
-            var round = new Round(gameField, null);
-            rounds.Add(round);
-            var state = State.InitRound;
-        }
-
-        private void AddChoiceInRound(Choice choice)
-        {
-            rounds[currentRound].AddChoice(choice);
-            if (rounds[currentRound].Finished)
-                State = State.InitRound;
-        }
-
-        public bool GetPossibleAction()
-        {
-            rounds[currentRound].GetPossibleAction();
-            return true;
         }
     }
 }
