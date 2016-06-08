@@ -1,23 +1,43 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Citadels.Domain
 {
-    public class Architect: Person
+    class Architect: Person
     {
-        public Architect()
+        class GetQuartersForArchitect : Act
         {
-            Rank = 7;
+            public GetQuartersForArchitect(Player player, Person person, GameField field) :
+                base(player, person, field) { }
+
+            public override List<object> GetParam()
+            {
+                return null;
+            }
+
+            public override void Do(int[] choice, List<object> answ, Flags flags)
+            {
+                var quarters = field.TakeQuartersFromDeck(2);
+                field.PutQuartersInHand(player, quarters);
+                flags.AddActionDone = true;
+            }
+
+            public override InfoAct Info
+            {
+                get { return new InfoAct() { Name = "" }; }
+            }
         }
 
-        [InfoAct(Name="", Time = 6)]
-        void GetQuartersForArchitect(Player architect, GameField field)
+        public Architect()
         {
-            var quarters = field.TakeQuartersFromDeck(2);
-            field.TakeQuartersOnHand(architect, quarters);
+            Rank = 6;
+            MaxCountOfTakenQuartersFromDeck = 3;
+        }
+
+        public override List<Act> GetPossibleActons(Player player, Person person, Flags flags, GameField field)
+        {
+            if (flags.MainActionDone && !flags.AddActionDone)
+                return new List<Act>(){ new GetQuartersForArchitect(player, person, field)};
+            return new List<Act>();
         }
     }
 }
