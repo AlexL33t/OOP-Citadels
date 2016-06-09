@@ -10,13 +10,16 @@ namespace Citadels.Domain
     {
         public BuildQuarter(Player player, Person person, GameField field) :
             base(player, person, field) { }
-        public override void Do(int[] indexs, List<object> answ, Flags flags)
+
+        public override void Do(int[] indices, List<object> answ, Flags flags)
         {
-            if (person.MaxCountOfTakenQuartersFromDeck < indexs.Length)
+            if (person.MaxCountOfTakenQuartersFromDeck < indices.Length)
                 throw new Exception("");
 
-            var quarter = field.TakeQuartersFromHand(player, indexs);
-            var sum = quarter.Select(q => q.Cost).Sum();
+            var quarter = field.TakeSeveralQuartersFromHand(player, indices);
+            var sum = quarter
+                .Select(q => q.Cost)
+                .Sum();
             if (sum > field.ShowBankState(player))
                 throw new Exception("");
             field.TakeMoneyFromBank(player, sum);
@@ -25,9 +28,9 @@ namespace Citadels.Domain
 
         }
 
-        public override List<object> GetParam()
+        public override List<object> GetParameters()
         {
-            return new List<object>(field.ShowQuarterInHand(player));
+            return new List<object>(field.ShowQuarterOnHand(player));
         }
 
         public override InfoAct Info

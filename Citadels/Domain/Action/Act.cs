@@ -13,7 +13,7 @@ namespace Citadels.Domain
         protected Person person;
 
         public abstract InfoAct Info { get; }
-        public abstract List<object> GetParam();
+        public abstract List<object> GetParameters();
         public abstract void Do(int[] choice, List<object> answ, Flags flags);
 
         public Act(Player player, Person person, GameField field)

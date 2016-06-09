@@ -6,19 +6,15 @@ using System.Threading.Tasks;
 
 namespace Citadels.Domain
 {
-    class GetMoneyFromQuarters : Act
+    class AddingMoneyToBank : Act
     {
-        public GetMoneyFromQuarters(Player player, Person person, GameField field) :
+        public AddingMoneyToBank(Player player, Person person, GameField field) :
             base(player, person, field) { }
 
         public override void Do(int[] choice, List<object> answ, Flags flags)
         {
-            var money = field
-                .ShowCity(player)
-                .Where(quarter => quarter.Color == person.Color)
-                .Count() * field.ShowIncome;
-            field.AddMoneyToBank(player, money);
-            flags.IncomeTaken = true;
+            field.AddMoneyToBank(player, 2);
+            flags.MainActionDone = true;
         }
 
         public override List<object> GetParameters()

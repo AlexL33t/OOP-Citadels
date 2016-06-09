@@ -11,18 +11,18 @@ namespace Citadels.Domain
         public ChooseQuarter(Player player, Person person, GameField field) :
             base(player, person, field) { }
 
-        public override void Do(int[] indexes, List<object> answ, Flags flags)
+        public override void Do(int[] indices, List<object> answ, Flags flags)
         {
-            if (indexes.Length > 1)
+            if (indices.Length > 1)
                 throw new Exception("");
 
-            field.PutQuartersInHand(player, new List<Quarter>() { (Quarter)answ[indexes[0]] });
-            answ.RemoveAt(indexes[0]);
+            field.PutQuartersOnHand(player, new List<Quarter>() { (Quarter)answ[indices[0]] });
+            answ.RemoveAt(indices[0]);
             field.PutQuartersOnDeck(new List<Quarter>() { (Quarter)answ[0] });
             flags.MainActionDone = true;
         }
 
-        public override List<object> GetParam()
+        public override List<object> GetParameters()
         {
             return new List<object>(field.TakeQuartersFromDeck(2));
         }
