@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -78,21 +78,11 @@ namespace Citadels.Domain
 
         private List<Person> GetPersons()
         {
-            var persons = new List<Person>();
-            persons.Add(new Architect());
-            persons.Add(new Assassin());
-            //persons.Add(new Bishop());
-            persons.Add(new King());
-            persons.Add(new Magician());
-            persons.Add(new Merchant());
-            //persons.Add(new Thief());
-            //persons.Add(new Warlord());
-            return persons;
-            //return typeof(Person)
-            //    .Assembly.GetTypes()
-            //    .Where(t => t.IsSubclassOf(typeof(Person)) && !t.IsAbstract)
-            //    .Select(t => (Person)Activator.CreateInstance(t))
-            //    .ToList();
+            return typeof(Person)
+                .Assembly.GetTypes()
+                .Where(t => t.IsSubclassOf(typeof(Person)) && !t.IsAbstract)
+                .Select(t => (Person)Activator.CreateInstance(t))
+                .ToList();
         }
     }
 }

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -71,7 +71,7 @@ namespace Citadels.App
                 var choice = ui.PromptInt("Введите номер действия", "0");
                 if (choice >= possibleActions.Count)
                     throw new Exception("");
-                
+
                 game.ChooseAction(choice);
 
                 var ch = 0;

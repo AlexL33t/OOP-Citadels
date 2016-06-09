@@ -14,7 +14,7 @@ namespace Citadels.Domain
 
         public abstract List<Act> GetPossibleActons(Player player, Person person, Flags flags, GameField field);
         
-        #region equals, gethashcode
+        #region equals, gethashcode, tostring
         protected bool Equals(Person other)
         {
             return Rank == other.Rank && (int)Color == (int)other.Color;
@@ -34,6 +34,11 @@ namespace Citadels.Domain
             {
                 return Rank ^ (int)Color + 123;
             }
+        }
+
+        public override string ToString()
+        {
+            return GetType().Name;
         }
         #endregion
     }

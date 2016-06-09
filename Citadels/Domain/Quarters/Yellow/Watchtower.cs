@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Citadels.Domain;
 
-namespace Citadels.App
+namespace Citadels.Domain
 {
-    class Program
+    public class Watchtower : Quarter
     {
-        static void Main(string[] args)
+        public Watchtower()
         {
-            new CitadelsConsoleUI().Run();
+            Cost = 1;
+            Color = QuarterColor.Yellow;
         }
     }
 }

@@ -30,6 +30,5 @@ namespace Citadels.App
                 cmd.Execute();
             }
         }
-
     }
 }

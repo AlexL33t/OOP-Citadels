@@ -23,7 +23,7 @@ namespace Citadels.Domain
 
             public override InfoAct Info
             {
-                get { return new InfoAct() { Name = "" }; }
+                get { return new InfoAct() { Name = "Взять дополнительно два квартала" }; }
             }
         }
 

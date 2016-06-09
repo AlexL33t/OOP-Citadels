@@ -78,8 +78,6 @@
     <Compile Include="Domain\Persons\King.cs" />
     <Compile Include="Domain\Persons\Magician.cs" />
     <Compile Include="Domain\Persons\Merchant.cs" />
-    <Compile Include="Domain\Persons\Thief.cs" />
-    <Compile Include="Domain\Persons\Warlord.cs" />
     <Compile Include="Domain\Player.cs" />
     <Compile Include="Domain\Quarter.cs" />
     <Compile Include="Domain\Quarters\Blue\Cathedral.cs" />
@@ -90,10 +88,10 @@
     <Compile Include="Domain\Quarters\Green\Market.cs" />
     <Compile Include="Domain\Quarters\Green\Tavern.cs" />
     <Compile Include="Domain\Quarters\Green\TownHall.cs" />
-    <Compile Include="Domain\Quarters\Red\Fortress.cs" />
-    <Compile Include="Domain\Quarters\Red\MarsField.cs" />
-    <Compile Include="Domain\Quarters\Red\Prison.cs" />
-    <Compile Include="Domain\Quarters\Red\Watchtower.cs" />
+    <Compile Include="Domain\Quarters\Yellow\Fortress.cs" />
+    <Compile Include="Domain\Quarters\Yellow\MarsField.cs" />
+    <Compile Include="Domain\Quarters\Yellow\Prison.cs" />
+    <Compile Include="Domain\Quarters\Yellow\Watchtower.cs" />
     <Compile Include="Domain\Quarters\Yellow\Castle.cs" />
     <Compile Include="Domain\Quarters\Yellow\Estate.cs" />
     <Compile Include="Domain\Quarters\Yellow\Palazzo.cs" />

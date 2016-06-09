@@ -43,13 +43,14 @@ namespace Citadels.Domain
         {
             if (Finished) throw new Exception("");
             runningAction = i;
+            answ = actions[runningAction].GetParameters();
         }
 
         public List<object> GetParameters()
         {
             if (Finished) throw new Exception("");
             if (runningAction == -1) throw new Exception("");
-            answ = actions[runningAction].GetParameters();
+            //answ = actions[runningAction].GetParameters();
             return answ;
         }
 
@@ -84,7 +85,6 @@ namespace Citadels.Domain
                 person
                     .GetPossibleActons(player, person, flags, field)
                     .ForEach(e => actions.Add(e));
-
             return actions;
         }
     }
