@@ -5,12 +5,27 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{7AD62187-46BA-4373-83B4-4AC110987050}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Citadels</RootNamespace>
     <AssemblyName>Citadels</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <PublishUrl>опубликовать\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -31,6 +46,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -41,13 +59,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Domain\Action\Act.cs" />
+    <Compile Include="Domain\Action\AddingMoneyToBank.cs" />
+    <Compile Include="Domain\Action\BuildQuarter.cs" />
+    <Compile Include="Domain\Action\ChooseQuarter.cs" />
+    <Compile Include="Domain\Action\Flags.cs" />
+    <Compile Include="Domain\Action\GetMoneyFromQuarters.cs" />
+    <Compile Include="Domain\Action\InfoAct.cs" />
     <Compile Include="Domain\Choice.cs" />
+    <Compile Include="Domain\Persons\Bishop.cs" />
     <Compile Include="Domain\PlayerAction.cs" />
     <Compile Include="Domain\QuarterColor.cs" />
     <Compile Include="Domain\GameField.cs" />
     <Compile Include="Domain\Game.cs" />
-    <Compile Include="Domain\Info.cs" />
-    <Compile Include="Domain\InfoAct.cs" />
     <Compile Include="Domain\Person.cs" />
     <Compile Include="Domain\Persons\Architect.cs" />
     <Compile Include="Domain\Persons\Assassin.cs" />
@@ -58,6 +82,21 @@
     <Compile Include="Domain\Persons\Warlord.cs" />
     <Compile Include="Domain\Player.cs" />
     <Compile Include="Domain\Quarter.cs" />
+    <Compile Include="Domain\Quarters\Blue\Cathedral.cs" />
+    <Compile Include="Domain\Quarters\Blue\Church.cs" />
+    <Compile Include="Domain\Quarters\Blue\Monastery.cs" />
+    <Compile Include="Domain\Quarters\Blue\Shrine.cs" />
+    <Compile Include="Domain\Quarters\Green\Harbor.cs" />
+    <Compile Include="Domain\Quarters\Green\Market.cs" />
+    <Compile Include="Domain\Quarters\Green\Tavern.cs" />
+    <Compile Include="Domain\Quarters\Green\TownHall.cs" />
+    <Compile Include="Domain\Quarters\Red\Fortress.cs" />
+    <Compile Include="Domain\Quarters\Red\MarsField.cs" />
+    <Compile Include="Domain\Quarters\Red\Prison.cs" />
+    <Compile Include="Domain\Quarters\Red\Watchtower.cs" />
+    <Compile Include="Domain\Quarters\Yellow\Castle.cs" />
+    <Compile Include="Domain\Quarters\Yellow\Estate.cs" />
+    <Compile Include="Domain\Quarters\Yellow\Palazzo.cs" />
     <Compile Include="Domain\Round.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -65,7 +104,21 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Domain\Quarters\" />
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5 %28x86 и x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>Клиентский профиль .NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
