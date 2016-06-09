@@ -1,0 +1,8 @@
+D:\папка для разного\ООП (Java, C#)\C#\Citadels\Citadels.App\bin\Debug\Citadels.App.exe.config
+D:\папка для разного\ООП (Java, C#)\C#\Citadels\Citadels.App\obj\Debug\Citadels.App.csprojResolveAssemblyReference.cache
+D:\папка для разного\ООП (Java, C#)\C#\Citadels\Citadels.App\bin\Debug\Citadels.App.exe
+D:\папка для разного\ООП (Java, C#)\C#\Citadels\Citadels.App\bin\Debug\Citadels.App.pdb
+D:\папка для разного\ООП (Java, C#)\C#\Citadels\Citadels.App\bin\Debug\Citadels.pdb
+D:\папка для разного\ООП (Java, C#)\C#\Citadels\Citadels.App\obj\Debug\Citadels.App.exe
+D:\папка для разного\ООП (Java, C#)\C#\Citadels\Citadels.App\obj\Debug\Citadels.App.pdb
+D:\папка для разного\ООП (Java, C#)\C#\Citadels\Citadels.App\bin\Debug\Citadels.dll
