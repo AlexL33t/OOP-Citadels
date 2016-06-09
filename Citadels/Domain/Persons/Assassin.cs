@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Citadels.Domain
 {
@@ -9,7 +9,7 @@ namespace Citadels.Domain
             public KillPerson(Player player, Person person, GameField field) :
                 base(player, person, field) { }
 
-            public override List<object> GetParam()
+            public override List<object> GetParameters()
             {
                 return new List<object>(field.Persons);
             }
@@ -33,7 +33,7 @@ namespace Citadels.Domain
 
         public override List<Act> GetPossibleActons(Player player, Person person, Flags flags, GameField field)
         {
-            return new List<Act>(){new KillPerson(player, person, field)};
+            return new List<Act>() { new KillPerson(player, person, field) };
         }
     }
 }

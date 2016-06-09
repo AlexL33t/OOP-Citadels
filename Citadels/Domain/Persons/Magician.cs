@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace Citadels.Domain
@@ -10,7 +10,7 @@ namespace Citadels.Domain
             public ExchangeQuartersWithPlayer(Player player, Person person, GameField field) :
                 base(player, person, field) { }
 
-            public override List<object> GetParam()
+            public override List<object> GetParameters()
             {
                 return new List<object>(field.Players);
             }
@@ -19,8 +19,8 @@ namespace Citadels.Domain
             {
                 var magicianQuarters = field.TakeAllQuartersFromHand(player);
                 var playerQuarters = field.TakeAllQuartersFromHand((Player)answ[choice[0]]);
-                field.PutQuartersInHand((Player)answ[choice[0]], magicianQuarters);
-                field.PutQuartersInHand(player, playerQuarters);
+                field.PutQuartersOnHand((Player)answ[choice[0]], magicianQuarters);
+                field.PutQuartersOnHand(player, playerQuarters);
                 flags.AddActionDone = true;
             }
 
@@ -35,17 +35,17 @@ namespace Citadels.Domain
             public ExchangeQuartersWithFreeQuarters(Player player, Person person, GameField field) :
                 base(player, person, field) { }
 
-            public override List<object> GetParam()
+            public override List<object> GetParameters()
             {
                 return new List<object>(field.Players);
             }
 
             public override void Do(int[] choice, List<object> answ, Flags flags)
             {
-                if (choice.Length > field.ShowQuarterInHand(player).Count)
+                if (choice.Length > field.ShowQuarterOnHand(player).Count)
                     throw new Exception("");
 
-                var magicianQuarters = field.TakeQuartersFromHand(player, choice);
+                var magicianQuarters = field.TakeSeveralQuartersFromHand(player, choice);
                 var deckQuarters = field.TakeQuartersFromDeck(choice.Length);
                 field.PutQuartersOnDeck(deckQuarters);
                 flags.AddActionDone = true;
@@ -56,7 +56,7 @@ namespace Citadels.Domain
                 get { return new InfoAct() { Name = "" }; }
             }
         }
-        
+
         public Magician()
         {
             Rank = 3;
@@ -64,8 +64,10 @@ namespace Citadels.Domain
 
         public override List<Act> GetPossibleActons(Player player, Person person, Flags flags, GameField field)
         {
-            return new List<Act>() { new ExchangeQuartersWithPlayer(player, person, field),
-            new ExchangeQuartersWithFreeQuarters(player, person, field)};
+            return new List<Act>() { 
+                new ExchangeQuartersWithPlayer(player, person, field),
+                new ExchangeQuartersWithFreeQuarters(player, person, field)
+            };
         }
     }
 }

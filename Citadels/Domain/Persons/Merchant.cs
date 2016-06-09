@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Citadels.Domain
 {
@@ -9,14 +9,14 @@ namespace Citadels.Domain
             public MerchantAction(Player player, Person person, GameField field) :
                 base(player, person, field) { }
 
-            public override List<object> GetParam()
+            public override List<object> GetParameters()
             {
                 return null;
             }
 
             public override void Do(int[] choice, List<object> answ, Flags flags)
             {
-                field.AddMoneyInBank(player, 1);
+                field.AddMoneyToBank(player, 1);
                 flags.AddActionDone = true;
             }
 
@@ -28,12 +28,15 @@ namespace Citadels.Domain
 
         public Merchant()
         {
-            Rank = 5;
+            Rank = 6;
+            Color = QuarterColor.Green;
         }
 
         public override List<Act> GetPossibleActons(Player player, Person person, Flags flags, GameField field)
         {
-            return new List<Act>() {new MerchantAction(player, person, field)};
+            if (flags.MainActionDone && !flags.AddActionDone)
+                return new List<Act>() { new MerchantAction(player, person, field) };
+            return new List<Act>();
         }
     }
 }

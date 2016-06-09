@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Citadels.Domain
 {
@@ -9,7 +9,7 @@ namespace Citadels.Domain
             public Сoronation(Player player, Person person, GameField field) :
                 base(player, person, field) { }
 
-            public override List<object> GetParam()
+            public override List<object> GetParameters()
             {
                 return null;
             }
@@ -29,11 +29,12 @@ namespace Citadels.Domain
         public King()
         {
             Rank = 4;
+            Color = QuarterColor.Yellow;
         }
 
         public override List<Act> GetPossibleActons(Player player, Person person, Flags flags, GameField field)
         {
-            return new List<Act>(){ new Сoronation(player, person, field)};
+            return new List<Act>() { new Сoronation(player, person, field) };
         }
     }
 }
