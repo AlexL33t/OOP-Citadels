@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Citadels.Domain
 {
@@ -16,7 +16,7 @@ namespace Citadels.Domain
         private Dictionary<Player, List<Quarter>> onHand;
         private Dictionary<Player, int> bank;
 
-        public int CountQuartersInDeck { get { return freeQuarters.Count; } }
+        public int CountQuartersOnDeck { get { return freeQuarters.Count; } }
 
         public GameField(List<Player> players, List<Person> persons, List<Quarter> freeQuarters)
         {
@@ -35,7 +35,7 @@ namespace Citadels.Domain
         }
 
 
-        public int ShowIncome {get {return income;}}
+        public int ShowIncome { get { return income; } }
 
         public void KillPerson(Person person)
         {
@@ -48,7 +48,7 @@ namespace Citadels.Domain
         }
 
         #region Show
-        public IReadOnlyList<Quarter> ShowQuarterInHand(Player player)
+        public IReadOnlyList<Quarter> ShowQuarterOnHand(Player player)
         {
             return onHand[player].AsReadOnly();
         }
@@ -65,7 +65,7 @@ namespace Citadels.Domain
         #endregion
 
         # region Bank
-        public void AddMoneyInBank(Player currentPlayer, int count)
+        public void AddMoneyToBank(Player currentPlayer, int count)
         {
             bank[currentPlayer] += count;
         }
@@ -84,19 +84,25 @@ namespace Citadels.Domain
             return quarters;
         }
 
-        public List<Quarter> TakeQuartersFromHand(Player player, int[] i)
+        public List<Quarter> TakeSeveralQuartersFromHand(Player player, int[] i)
         {
-            return new List<Quarter>();
+            var quarters = new List<Quarter>();
+            foreach (var e in i)
+            {
+                quarters.Add(onHand[player][e]);
+                onHand[player].Remove(onHand[player][e]);
+            }
+            return quarters;
         }
 
-        public Quarter TakeQuarterFromHand(Player player, int index)
+        public Quarter TakeOneQuarterFromHand(Player player, int index)
         {
             var quarter = onHand[player][index];
             onHand[player].RemoveAt(index);
             return quarter;
         }
 
-        public void PutQuartersInHand(Player player, List<Quarter> quarters)
+        public void PutQuartersOnHand(Player player, List<Quarter> quarters)
         {
             onHand[player].AddRange(quarters);
         }

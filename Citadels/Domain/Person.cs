@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +9,7 @@ namespace Citadels.Domain
     public abstract class Person
     {
         public int Rank;
-        public QuarterColor Color = QuarterColor.None;;
+        public QuarterColor Color = QuarterColor.None;
         public int MaxCountOfTakenQuartersFromDeck = 1;
 
         public abstract List<Act> GetPossibleActons(Player player, Person person, Flags flags, GameField field);

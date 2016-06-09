@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,7 +11,7 @@ namespace Citadels.Domain
         private Player player;
         private Person person;
         private GameField field;
-        Flags flags; 
+        Flags flags;
 
         private List<object> answ;
         private int runningAction = -1;
@@ -39,17 +39,17 @@ namespace Citadels.Domain
             actions = GetActions();
         }
 
-        public void ChoiseAction(int i)
+        public void ChooseAction(int i)
         {
             if (Finished) throw new Exception("");
             runningAction = i;
         }
 
-        public List<object> GetParam()
+        public List<object> GetParameters()
         {
             if (Finished) throw new Exception("");
             if (runningAction == -1) throw new Exception("");
-            answ = actions[runningAction].GetParam();
+            answ = actions[runningAction].GetParameters();
             return answ;
         }
 
@@ -57,22 +57,25 @@ namespace Citadels.Domain
         {
             if (Finished)
                 throw new Exception("");
-            return actions.Select(a => a.Info).ToList();
+            return actions
+                .Select(a => a.Info)
+                .ToList();
         }
 
-       
+
         private List<Act> GetActions()
         {
             actions = new List<Act>();
             if (!flags.MainActionDone)
             {
-                actions.Add(new AddingMoneyInBank(player, person, field));
-                if (field.CountQuartersInDeck >= 2) actions.Add(new ChooseQuarter(player, person, field));
+                actions.Add(new AddingMoneyToBank(player, person, field));
+                if (field.CountQuartersOnDeck >= 2)
+                    actions.Add(new ChooseQuarter(player, person, field));
             }
             else
             {
                 int money = field.ShowBankState(player);
-                if (!flags.BuildedQuarter && field.ShowQuarterInHand(player).Any(q => q.Cost <= money))
+                if (!flags.BuildedQuarter && field.ShowQuarterOnHand(player).Any(q => q.Cost <= money))
                     actions.Add(new BuildQuarter(player, person, field));
                 if (!flags.IncomeTaken && field.ShowCity(player).Any(q => q.Color == person.Color))
                     actions.Add(new GetMoneyFromQuarters(player, person, field));

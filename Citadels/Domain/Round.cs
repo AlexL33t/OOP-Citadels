@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,7 +6,7 @@ namespace Citadels.Domain
 {
     public class Round
     {
-        public bool Finished { get { return gameField.Players.Count == pl.Count && pl.Last().Finished; } }
+        public bool Finished { get { return gameField.Players.Count == playerActions.Count && playerActions.Last().Finished; } }
         public bool IsInited { get { return gameField.Players.Count == playerToPerson.Count; } }
         public string CurrentPlayerName { get { return players[indexPlayer].Name; } }
 
@@ -17,12 +17,12 @@ namespace Citadels.Domain
         private List<Person> persons;
         private List<Player> players;
         private int indexPlayer;
-        private List<PlayerAction> pl;
+        private List<PlayerAction> playerActions;
 
         public Round(GameField gameField)
         {
             this.gameField = gameField;
-            pl = new List<PlayerAction>();
+            playerActions = new List<PlayerAction>();
             playerToPerson = new Dictionary<Player, Person>();
             persons = new List<Person>(gameField.Persons);
             indexPlayer = 0;
@@ -32,13 +32,13 @@ namespace Citadels.Domain
 
         private List<Player> GetPlayers(List<Player> players, int i)
         {
-            var pl = new List<Player>();
+            var newPlayers = new List<Player>();
             for (int j = 0; j < gameField.Players.Count; j++)
             {
-                pl.Add(players[i]);
+                newPlayers.Add(players[i]);
                 i = (i + 1) % players.Count;
             }
-            return pl;
+            return newPlayers;
         }
 
         public void CharacterSelection(Player currentPlayer, int[] choice)
@@ -59,7 +59,7 @@ namespace Citadels.Domain
             });
 
             foreach (var e in players)
-                pl.Add(new PlayerAction(e, playerToPerson[e], gameField));
+                playerActions.Add(new PlayerAction(e, playerToPerson[e], gameField));
             indexPlayer = 0;
         }
 
@@ -76,8 +76,9 @@ namespace Citadels.Domain
             }
             else
             {
-                pl[indexPlayer].AddChoice(choice);
-                if (pl[indexPlayer].Finished && !Finished) indexPlayer++;
+                playerActions[indexPlayer].AddChoice(choice);
+                if (playerActions[indexPlayer].Finished && !Finished)
+                    indexPlayer++;
             }
         }
 
@@ -86,24 +87,24 @@ namespace Citadels.Domain
             if (Finished)
                 throw new Exception("");
             if (!IsInited)
-                return new List<InfoAct>() { new InfoAct() { Name = "Выбирите персонажа" } };
-            return pl[indexPlayer].GetPossibleActions();
+                return new List<InfoAct>() { new InfoAct() { Name = "Выберите персонажа" } };
+            return playerActions[indexPlayer].GetPossibleActions();
         }
 
-        public List<object> Param
+        public List<object> Parameters
         {
             get
             {
                 if (!IsInited)
                     return new List<object>(persons);
-                return pl[indexPlayer].GetParam();
+                return playerActions[indexPlayer].GetParameters();
             }
         }
 
-        public void ChoiseAction(int i)
+        public void ChooseAction(int i)
         {
             if (IsInited)
-                pl[indexPlayer].ChoiseAction(i);
+                playerActions[indexPlayer].ChooseAction(i);
         }
     }
 }
