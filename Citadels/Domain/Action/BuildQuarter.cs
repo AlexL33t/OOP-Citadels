@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -35,7 +35,7 @@ namespace Citadels.Domain
 
         public override InfoAct Info
         {
-            get { return new InfoAct() { Name = "" }; }
+            get { return new InfoAct() { Name = "Построить квартал" }; }
         }
     }
 }
