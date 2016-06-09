@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -61,7 +61,7 @@ namespace Citadels.App
         private void MakeMoves(Game game, List<Player> players)
         {
             Console.WriteLine("Ходы игроков");
-            for (int i = 0; i < players.Count + 1; i++)
+            while (!game.RoundFinished)
             {
                 Console.WriteLine("Ход игрока {0}", game.CurrentPlayerName);
                 Console.WriteLine("Доступные действия:");
@@ -71,8 +71,21 @@ namespace Citadels.App
                 var choice = ui.PromptInt("Введите номер действия", "0");
                 if (choice >= possibleActions.Count)
                     throw new Exception("");
+                
                 game.ChooseAction(choice);
-                game.AddChoice(new int[] { choice });
+
+                var ch = 0;
+                var e = game.Parameters;
+                if (e != null)
+                {
+                    foreach (var j in e)
+                        Console.WriteLine(j);
+                    ch = ui.PromptInt("Введите номер ==", "0");
+                    if (ch >= e.Count)
+                        throw new Exception("");
+                }
+
+                game.AddChoice(new int[] { ch });
             }
         }
     }
